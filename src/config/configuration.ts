@@ -291,6 +291,33 @@ export default () => {
       openExchangeRatesApiKey: process.env.OPEN_EXCHANGE_RATES_API_KEY || '',
       exchangeRateHostApiKey: process.env.EXCHANGE_RATE_HOST_API_KEY || '',
     },
+
+    // Swap / FX slippage — validated via Zod; never read process.env directly
+    swap: {
+      slippagePercent: parseFloat(
+        process.env.SWAP_SLIPPAGE_PERCENT || '0.005',
+      ),
+      previewCacheTtlSeconds: parseInt(
+        process.env.SWAP_PREVIEW_CACHE_TTL_SECONDS || '30',
+        10,
+      ),
+    },
+
+    // Scheduled-jobs configuration
+    scheduledJobs: {
+      pendingTxTimeoutMinutes: parseInt(
+        process.env.PENDING_TX_TIMEOUT_MINUTES || '30',
+        10,
+      ),
+    // Auth-specific throttle limit (validated via Zod — must be a positive integer)
+    throttleAuth: {
+      limit: parseInt(process.env.THROTTLE_AUTH_LIMIT || '5', 10),
+    },
+
+    // Stellar hot wallet (required only when Stellar payments are enabled)
+    stellar: {
+      hotWalletSecret: process.env.STELLAR_HOT_WALLET_SECRET ?? null,
+    },
   };
 };
 

@@ -328,12 +328,55 @@ export const envSchema = z.object({
   // ============================================
   WALLET_ENCRYPTION_KEY: z
     .string()
-    .min(1, 'WALLET_ENCRYPTION_KEY is required')
-    .refine((val) => hexStringRegex.test(val) && val.length === 64, {
-      message: 'WALLET_ENCRYPTION_KEY must be a 64-character hex string',
-    }),
     .length(64, 'WALLET_ENCRYPTION_KEY must be exactly 64 hex characters')
-    .regex(/^[0-9a-fA-F]{64}$/, 'WALLET_ENCRYPTION_KEY must be a valid hex string'),
+    .regex(
+      /^[0-9a-fA-F]{64}$/,
+      'WALLET_ENCRYPTION_KEY must be a valid 64-character hex string',
+    ),
+
+  // ============================================
+  // Swap / FX configuration
+  // ============================================
+  SWAP_SLIPPAGE_PERCENT: z
+    .string()
+    .transform(Number)
+    .pipe(z.number().positive().max(0.1))
+    .default(() => 0.005),
+
+  SWAP_PREVIEW_CACHE_TTL_SECONDS: z
+    .string()
+    .transform(Number)
+    .pipe(z.number().int().positive())
+    .default(() => 30),
+
+  // ============================================
+  // Scheduled-jobs / distributed locking
+  // ============================================
+  PENDING_TX_TIMEOUT_MINUTES: z
+    .string()
+    .transform(Number)
+    .pipe(z.number().int().positive())
+    .default(() => 30),
+  // KYC document storage
+  // ============================================
+  KYC_STORAGE_HOST: z.string().optional(),
+
+  // ============================================
+  // Stellar asset issuers (comma-separated CODE:GADDRESS pairs)
+  // ============================================
+  STELLAR_ASSET_ISSUERS: z.string().optional(),
+  // Auth Rate Limiting
+  // ============================================
+  THROTTLE_AUTH_LIMIT: z
+    .string()
+    .transform(Number)
+    .pipe(z.number().int().positive())
+    .default(() => 5),
+
+  // ============================================
+  // Stellar Hot Wallet (optional — required only when Stellar is enabled)
+  // ============================================
+  STELLAR_HOT_WALLET_SECRET: z.string().optional(),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
