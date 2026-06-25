@@ -70,6 +70,7 @@ export class Transaction {
 
   @Column({ type: 'timestamp', nullable: true })
   pendingTimeoutAt!: Date | null;
+  pendingTimeoutAt: Date | null;
 
   @Column({ type: 'uuid', nullable: true })
   reversedBy!: string | null;
@@ -85,6 +86,9 @@ export class Transaction {
 
   @Column({ type: 'varchar', length: 128, nullable: true })
   txHash!: string | null;
+
+  @Column({ type: 'jsonb', nullable: true, default: () => "'[]'" })
+  retryHashes!: string[];
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deletedAt!: Date | null;
