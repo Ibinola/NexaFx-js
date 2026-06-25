@@ -31,14 +31,14 @@ export class Transaction {
   @Column({ type: 'uuid' })
   receiverId!: string;
 
-  @Column({ type: 'decimal', precision: 18, scale: 8 })
-  amount!: number;
+  @Column({ type: 'decimal', precision: 20, scale: 8 })
+  amount: number;
 
   @Column({ length: 10 })
   currency!: string;
 
-  @Column({ type: 'decimal', precision: 18, scale: 8, default: 0 })
-  fee!: number;
+  @Column({ type: 'decimal', precision: 20, scale: 8, default: 0 })
+  fee: number;
 
   @Column({
     type: 'enum',
@@ -62,6 +62,10 @@ export class Transaction {
 
   @Column({ type: 'timestamp', nullable: true })
   reversedAt!: Date | null;
+  pendingTimeoutAt: Date | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  reversedAt: Date | null;
 
   @Column({ type: 'uuid', nullable: true })
   reversedBy!: string | null;
@@ -71,6 +75,9 @@ export class Transaction {
 
   @Column({ type: 'uuid', nullable: true })
   reversalTransactionId!: string | null;
+
+  @Column({ type: 'varchar', length: 128, nullable: true })
+  txHash: string | null;
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deletedAt!: Date | null;
