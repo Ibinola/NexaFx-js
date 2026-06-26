@@ -30,6 +30,7 @@ import { TransactionQueueModule } from './transaction/transaction.module';
 import { UsersModule } from './users/users.module';
 import { WalletsModule } from './wallet/wallets.module';
 import { ReconciliationModule } from './reconciliation/reconciliation.module';
+import { ScheduledJobsModule } from './scheduled-jobs/scheduled-jobs.module';
 import { DisputesModule } from './disputes/disputes.module';
 import { MetricsModule } from './metrics/metrics.module';
 import { StellarModule } from './stellar/stellar.module';
@@ -185,6 +186,7 @@ async function createCacheOptions(configService: ConfigService<Configuration>) {
     TermsModule,
     AuthModule,
     ReconciliationModule,
+    ScheduledJobsModule,
     DisputesModule,
     MetricsModule,
     StellarModule,
