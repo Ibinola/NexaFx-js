@@ -32,6 +32,7 @@ import { WalletsModule } from './wallet/wallets.module';
 import { ReconciliationModule } from './reconciliation/reconciliation.module';
 import { DisputesModule } from './disputes/disputes.module';
 import { MetricsModule } from './metrics/metrics.module';
+import { RatesModule } from './rates/rates.module';
 import { StellarModule } from './stellar/stellar.module';
 
 const enableBull =
@@ -188,6 +189,7 @@ async function createCacheOptions(configService: ConfigService<Configuration>) {
     DisputesModule,
     MetricsModule,
     StellarModule,
+    RatesModule,
   ],
   controllers: [AppController],
   providers: [
