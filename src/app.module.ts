@@ -25,6 +25,7 @@ import { TransactionQueueModule } from './transaction/transaction.module';
 import { UsersModule } from './users/users.module';
 import { WalletsModule } from './wallet/wallets.module';
 import { ReconciliationModule } from './reconciliation/reconciliation.module';
+import { ScheduledJobsModule } from './scheduled-jobs/scheduled-jobs.module';
 
 const enableBull =
   process.env.NODE_ENV !== 'test' && process.env.DISABLE_BULL !== 'true';
@@ -176,6 +177,7 @@ async function createCacheOptions(configService: ConfigService<Configuration>) {
     TermsModule,
     AuthModule,
     ReconciliationModule,
+    ScheduledJobsModule,
   ],
   controllers: [AppController],
   providers: [
