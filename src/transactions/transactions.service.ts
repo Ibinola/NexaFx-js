@@ -152,7 +152,9 @@ export class TransactionsService {
       .createQueryBuilder('tx')
       .orderBy('tx.createdAt', 'DESC')
       .skip((page - 1) * limit)
-      .take(limit);
+      .take(limit)
+      .leftJoinAndSelect('tx.sender', 'sender')
+      .leftJoinAndSelect('tx.receiver', 'receiver');
 
     if (userId) {
       qb.andWhere('(tx.senderId = :uid OR tx.receiverId = :uid)', {
