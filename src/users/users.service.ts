@@ -1,11 +1,15 @@
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
+  Inject,
   Injectable,
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import type { Cache } from 'cache-manager';
 import { User, UserRole, KycStatus } from './user.entity';
+import { ConfigService } from '@nestjs/config';
 
 export interface CreateUserDto {
   email: string;
@@ -28,6 +32,8 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(dto: CreateUserDto): Promise<User> {
@@ -73,6 +79,22 @@ export class UsersService {
     return safe;
   }
 
+  private get walletCacheTtl(): number {
+    return this.configService.get<number>('WALLET_BALANCE_CACHE_TTL_SECONDS') ?? 30;
+  }
+
+  async getCachedWalletBalance(userId: string): Promise<number | null> {
+    const cached = await this.cacheManager.get<number>(`wallet_balance:${userId}`);
+    return cached ?? null;
+  }
+
+  async setCachedWalletBalance(userId: string, balance: number): Promise<void> {
+    await this.cacheManager.set(`wallet_balance:${userId}`, balance, this.walletCacheTtl);
+  }
+
+  async invalidateWalletBalanceCache(userId: string): Promise<void> {
+    await this.cacheManager.del(`wallet_balance:${userId}`);
+  }
   async deleteUser(id: string): Promise<void> {
     const user = await this.findById(id);
     const uuid = crypto.randomUUID();
