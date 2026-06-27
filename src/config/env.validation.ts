@@ -382,6 +382,15 @@ export const envSchema = z.object({
   // Stellar Hot Wallet (optional — required only when Stellar is enabled)
   // ============================================
   STELLAR_HOT_WALLET_SECRET: z.string().optional(),
+
+  // ============================================
+  // Rate Replay Window
+  // ============================================
+  RATE_REPLAY_WINDOW_MS: z
+    .string()
+    .transform(Number)
+    .pipe(z.number().min(1000).max(3600000))
+    .default(() => 300000),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;

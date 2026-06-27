@@ -95,4 +95,13 @@ export class UsersService {
   async invalidateWalletBalanceCache(userId: string): Promise<void> {
     await this.cacheManager.del(`wallet_balance:${userId}`);
   }
+  async deleteUser(id: string): Promise<void> {
+    const user = await this.findById(id);
+    const uuid = crypto.randomUUID();
+    user.email = `deleted_${uuid}@deleted.invalid`;
+    user.firstName = '[deleted]';
+    user.lastName = '[deleted]';
+    await this.usersRepository.save(user);
+    await this.usersRepository.softDelete(id);
+  }
 }
