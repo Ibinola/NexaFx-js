@@ -207,6 +207,11 @@ export const envSchema = z.object({
     .transform(Number)
     .pipe(z.number().int().positive())
     .default(() => 60),
+  WALLET_BALANCE_CACHE_TTL_SECONDS: z
+    .string()
+    .transform(Number)
+    .pipe(z.number().min(1).max(3600))
+    .default(() => 30),
   ADMIN_ALLOWED_IPS: z.string().optional().default(''),
   WEBHOOK_MAX_ATTEMPTS: z
     .string()
@@ -386,6 +391,13 @@ export const envSchema = z.object({
     .transform(Number)
     .pipe(z.number().min(1).max(10000000))
     .default(() => 100),
+  // Rate Replay Window
+  // ============================================
+  RATE_REPLAY_WINDOW_MS: z
+    .string()
+    .transform(Number)
+    .pipe(z.number().min(1000).max(3600000))
+    .default(() => 300000),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
